@@ -1,66 +1,165 @@
-package lab2;
+package Shelter;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Scanner;
-
 
 public class Main {
 
-	public static void main(String[] args) {
+	public static final Scanner sc = new Scanner(System.in);
+	
+	public static void main(String[] args) throws IOException {
+		String [] list = new String[15];
+		Animal [] animals = new Animal[15];
 		
-		//Inicializar datos
-		Animal list[] = new Animal[0];
-		list [0] = new Dogs("perro",20, "h", true,  true, "azul", 12, true, false);
-		Shelter refugio = new Shelter("refugio", "Puertollano", lista[]);
+		animals=readAnimals("C:\\Users\\Daniel\\Desktop", list); //Directory where the Animales.txt document is located
+	
+		Shelter shel = new Shelter("Shelter MyPet", "Calle Ciruela 2", animals);
+		Clinic clin = new Clinic("PetCare Clinic", 926422391, 55.0);
+		TownCouncil coun = new TownCouncil(943234678, 130.2);
+		manageShelter(shel,clin,coun);
 		
-		
-		//Main loop
-		menu();
+	}
+	
+	
 
+	public static Animal [] readAnimals (String cadena, String [] list)throws IOException{	  
+		    File f=new File(cadena);
+		    Animal [] array = new Animal[15];
+		    Scanner sc = new Scanner (f);
+		    int counter=0;
+		    while (sc.hasNext()){
+		      char dogOrCat = sc.next().charAt(0);
+		      String name = sc.next();
+		      char gender = sc.next().charAt(0);
+		      int age = sc.nextInt();
+		      boolean sociable = sc.nextBoolean();
+		   	  boolean patrons = sc.nextBoolean();
+		   	  	if(dogOrCat == 'p') {
+		   	  		String breed = sc.next();
+		   	  		int size = sc.nextInt();
+		   	  		boolean pdb = sc.nextBoolean();
+		   	  		boolean leishmania = sc.nextBoolean();
+		   	  		list[counter] = dogOrCat+" "+name+" "+gender+" "+age+" "+sociable+" "+patrons+" "+breed+" "+size+" "+pdb+" "+leishmania;
+		   	  		array[counter] = new Dog(dogOrCat,name,gender,age,sociable,patrons,breed,size,pdb,leishmania);
+		   	  	}else {
+		   	  		boolean neutered = sc.nextBoolean();
+		   	  	list[counter]=dogOrCat+" "+name+" "+gender+" "+" "+age+" "+sociable+" "+patrons+" "+neutered;
+		   	  	array[counter]= new Cat(dogOrCat,name,gender,age,sociable,patrons,neutered);
+		   	  	}
+		   	  	counter++;
+		    }
+		    sc.close();
+		    
+		    return array;
+	 }
+
+	
+	private static void manageShelter(Shelter shel, Clinic clin, TownCouncil coun) {
+		int option;
+		do {
+		option = chooseMenu();
+		
+		switch(option) {
+		case 1:
+			showInformation(shel);
+			break;
+		case 2:
+			makeRequest(shel);
+			break;
+		case 3:
+			consultRequest(shel);
+			break;
+		case 4:
+			calculateExpenses(shel);
+			break;
+		case 5:
+			calculateNeutering(shel, clin);
+			break;
+		case 6:
+			estimateFood(shel);
+			break;
+		case 7:
+			calculateFunding(shel,coun);
+		case 8:
+			System.out.println("Thank you for using our application");
+			break;
+		}
+		
+		} while (option != 8);
+	}
+
+	
+	private static void showInformation(Shelter shelter) {
+		System.out.println(shelter.showInfo());
+		
 	}
 	
-	public static void menu() {
-		String choose;
-		Scanner sc = new Scanner(System.in);
-		System.out.println("This is the main menu of the program, choose an option:\n");
-		System.out.println("1. Show all information of the animals at the shelter");
-		System.out.println("2. Make a request");
-		System.out.println("3. Consult the list of request for the adoption of an animal");
-		System.out.println("4. Calculate the annual expenses");
-		System.out.println("5. Calculate the cost of neutering programme");
-		System.out.println("6. Estimate the amount of dogs food for this week");
-		System.out.println("7. Calculate the funding provided by the Town Council");
+	private static void makeRequest(Shelter shelter) {
+		int numb;
+		String req;
+		do {
+			System.out.println("Choose an animal [1-15]");
+			numb = sc.nextInt();
+		} while (numb < 1 || numb > 15);
+		do {
+			System.out.println("Do you want to foster or to adopt?");
+			req = sc.next();
+		} while (!req.equalsIgnoreCase("foster") && !req.equalsIgnoreCase("adopt"));
 		
-		choose = sc.next();
+		Request reque = new Request(req);
 		
-		switch (choose) {
-		
-		case "2":
-			
-			
-		}
-		
-		
+		shelter.getList()[numb-1].AddRequest(reque);
+	}
+
+	private static void consultRequest(Shelter shelter) {
+		int numb;
+		do {
+			System.out.println("Choose an animal [1-15]");
+			numb = sc.nextInt();
+		}while (numb < 1 || numb > 15);
+		for(int i=0;i<shelter.getList()[numb-1].getNumbRequest();i++)
+		System.out.println("Request ["+(i+1)+"]: "+shelter.getList()[numb-1].showAllRequests()[i]);
 	}
 	
-	public static void make_request(Animal [] list) {
-		Scanner sc = new Scanner(System.in);
-		int choose = 0;
-		int type = 0;
-		System.out.println("These are the available animals to request for");
-		for (int i=0; i<list.length; i++) {
-			System.out.print(i +". " + list[i].get_name());
-		}
-		System.out.println("Choose one");
-		choose = sc.nextInt();
-		System.out.println("Type 1 for foster, 2 for adopt");
-		type = sc.nextInt();
-		for(int i=0; i<10; i++) {
-			if(list[choose].get_list() != null) {
-				Request r = new Request ("Alvaro", 123);
-				list[choose].set_list(choose, r);
-			}
-		}
+	private static void calculateExpenses(Shelter shelter) {
+		System.out.println("The annual expenses of the shelter are: "+shelter.calculateExpenses()+"€");
 	}
+	
+	private static void calculateNeutering(Shelter shelter, Clinic clin) {
+		System.out.println("The cost of the neutering programme for the cats is: "+shelter.calculateNeuter(clin)+"€");
+	}
+
+	private static void estimateFood(Shelter shelter) {
+		System.out.println("The estimated amount of food for each adult dog for each week is: "+shelter.calculateFood()+" kg");
+	}
+	
+	private static void calculateFunding(Shelter shelter, TownCouncil council) {
+		System.out.println("The funding provided by the TownCouncil is: "+shelter.calculateFunding(council)+"€");
+	}
+	
+	
+	private static int chooseMenu() {
+		printMenu();
+		int option = 0;
+		
+		do {
+			System.out.println("Introduce the option you want to make: ");
+			option = sc.nextInt();
+		}while(option < 0 || option > 8); //IMPLEMENT WITH EXCEPTIONS
+		
+		return option;
+	}
+
+	private static void printMenu() {
+		System.out.println("Option 1: Show all the info of the animals");
+		System.out.println("Option 2: Make a request");
+		System.out.println("Option 3: Consult the list of requests");
+		System.out.println("Option 4: Calculate the annual veterinary expenses");
+		System.out.println("Option 5: Calculate the cost of the neutering programme for the cats");
+		System.out.println("Option 6: Estimate the amount of food required for each adult dog");
+		System.out.println("Option 7: Calculate the funding provided by the Town Council");
+		System.out.println("Option 8: Exit");
+	}
+	
 }
-
-

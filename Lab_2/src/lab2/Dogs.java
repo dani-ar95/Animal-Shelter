@@ -1,6 +1,7 @@
 package lab2;
 
 public class Dogs extends Animal {
+	//INICIO DE GITHUB
 	
 	//parameters
 	public String breed;

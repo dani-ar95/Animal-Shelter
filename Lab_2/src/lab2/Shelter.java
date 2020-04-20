@@ -1,56 +1,70 @@
-package lab2;
+package Shelter;
 
-public class Shelter {
-
-	private String name, adress;
-	private Animal[] list = new  Animal[10];
+public class Shelter implements IShel {
 	
+	//global variables
+	protected String name;
+	protected String address;
+	protected Animal[] list = new  Animal[15];
 	
-	Shelter (String name, String address, Animal[] listAnimal) {
+	//Constructor
+	Shelter(String name, String address, Animal[] listAnimal) {
+		this.name = name;
+		this.address = address;
+		list = listAnimal;
 	}
 	
-	public Animal[] get_list(Animal[] list) {
+	//methods
+	public Animal[] getList() {
 		return list;
 	}
 	
-	public double calculate_Funding(TownCouncil fund) {
-		double funding = 0;
-		return funding;		
+	public String showInfo() {
+		String cadena = "";
+		
+		for(int i=0;i<list.length;i++) {
+			cadena += list[i].toString();
+			cadena += "\n";
+		}
+		
+		return cadena;
 	}
 	
-	public double calculate_Neuter(Clinic neut) {
+	public double calculateFunding(TownCouncil fund) {
+		return fund.getFunding() + fund.getFixedAmount();		
+	}
+	
+	public double calculateNeuter(Clinic neut) {
 		double neuter = 0;
 		
-		for(int i=0; i<list.length; i++) {
-			if(list[i].get_type().charAt(0) == 'g') {
-				Cats c1 = (Cats) list[i];
-				if (c1.get_gender() == 'h'){
-					if(!c1.getNeuter()) 
-						neuter += neut.getPriceNeuter(c1);
-					}
+		for(int i=0;i<list.length;i++) {
+			if(list[i].getType() == 'g') {
+				Cat cat = (Cat) list[i];
+				if(cat.getGender() == 'h') {
+					if(cat.getNeuter() == false)
+					neuter += neut.getPriceNeuter();
 				}
 			}
-		return neuter;
 		}
+		return neuter;
+	}
 	
-	
-	
-	public double calculate_expenses(Animal [] list) {
+	public double calculateExpenses() {
 		double expenses = 0;
 		for(int i=0; i<list.length; i++) {
-			if(list[i].hasPatron = false) {
+			if(list[i].hasPatron() == false) {
 				
-				if (list[i].get_type().charAt(0) == 'd' ) {
-					Dogs d1 = (Dogs) list[i];
-					expenses += 25*12 + 30;
+				if (list[i].getType() == 'p' ) {
+					Dog d1 = (Dog) list[i];
+					expenses += LEISHEXPENSES*12 + RABIESVACCINE;
 					if (d1.getPdb() == true) {
-						expenses += 8*12;
+						expenses += RABIESVACCINE*12;
 					}
 				}
-				if (list[i].get_type().charAt(0) == 'c') {
-					Cats c1 = (Cats) list[i];
-					if( c1.getNeuter() == false) {
-						expenses += 10*12;
+				if (list[i].getType() == 'c') {
+					Cat c1 = (Cat) list[i];
+					if(c1.getNeuter() == false) {
+						expenses += UNNEUTEREDTREAT*12;
 					}
 				}
 			}
@@ -58,34 +72,26 @@ public class Shelter {
 		return expenses;
 	}
 	
-	public double calculate_food(Dogs dog) {
-		double total = 0;
-		if (dog.age < 18) {
-			total += 0;
-			}
-		if (dog.age > 18) {
-			if(dog.size < 15) {
-				total += 200 * 365;
-					}
-		if (dog.size < 25 || dog.size > 15) {
-			total += 300 * 365;
-				}
-		else{
-			total += ((1.5 * dog.size) / 100) * 365;
-				}
-			}
-		return total;
-		}
-	
-	
-	public String showInfo() {
-		String cadena = null;
+	public double calculateFood() {
+		double kilos = 0;
 		
 		for(int i=0;i<list.length;i++) {
-			cadena += list[i].toString();
+			if(list[i].getType() == 'p') {
+				Dog dog = (Dog) list[i];
+				if(dog.getAge() > 1) {
+					if(dog.getSize() < 15) {
+						kilos += FOODSMALL*7;
+					}else if(15 < dog.getSize() && dog.getSize() < 25) {
+						kilos += FOODMEDIUM*7;
+					}else {
+						kilos += dog.getSize()*0.015;
+					}
+				}
+			}
 		}
 		
-		return cadena;
+		return kilos;
 	}
-	}
+	
+}
 

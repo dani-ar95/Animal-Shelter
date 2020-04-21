@@ -1,7 +1,7 @@
 package lab2;
 
-import java.io.File;
-import java.io.IOException;
+
+import java.io.*;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -10,10 +10,12 @@ public class Main {
 	public static final Scanner sc = new Scanner(System.in);
 	
 	public static void main(String[] args) throws IOException {
+		//Data initialization 
 		String [] list = new String[15];
 		Animal [] animals = new Animal[15];
+		String directory = "C:\\Users\\Daniel\\Desktop";
 		
-		animals=readAnimals("C:\\Users\\Daniel\\Desktop", list); //Directory where the Animales.txt document is located
+		animals=readAnimals(directory, list); //Directory where the Animales.txt document is located
 	
 		Shelter shel = new Shelter("Shelter MyPet", "Calle Ciruela 2", animals);
 		Clinic clin = new Clinic("PetCare Clinic", 926422391, 55.0);
@@ -24,34 +26,43 @@ public class Main {
 	
 	
 
-	public static Animal [] readAnimals (String cadena, String [] list)throws IOException{	  
-		    File f=new File(cadena);
-		    Animal [] array = new Animal[15];
-		    Scanner sc = new Scanner (f);
-		    int counter=0;
-		    while (sc.hasNext()){
-		      char dogOrCat = sc.next().charAt(0);
-		      String name = sc.next();
-		      char gender = sc.next().charAt(0);
-		      int age = sc.nextInt();
-		      boolean sociable = sc.nextBoolean();
-		   	  boolean patrons = sc.nextBoolean();
-		   	  	if(dogOrCat == 'p') {
-		   	  		String breed = sc.next();
-		   	  		int size = sc.nextInt();
-		   	  		boolean pdb = sc.nextBoolean();
-		   	  		boolean leishmania = sc.nextBoolean();
-		   	  		list[counter] = dogOrCat+" "+name+" "+gender+" "+age+" "+sociable+" "+patrons+" "+breed+" "+size+" "+pdb+" "+leishmania;
-		   	  		array[counter] = new Dog(dogOrCat,name,gender,age,sociable,patrons,breed,size,pdb,leishmania);
-		   	  	}else {
-		   	  		boolean neutered = sc.nextBoolean();
-		   	  	list[counter]=dogOrCat+" "+name+" "+gender+" "+" "+age+" "+sociable+" "+patrons+" "+neutered;
-		   	  	array[counter]= new Cat(dogOrCat,name,gender,age,sociable,patrons,neutered);
-		   	  	}
-		   	  	counter++;
-		    }
-		    sc.close();
+	public static Animal [] readAnimals (String directory, String [] list)throws FileNotFoundException{	  
 		    
+			Animal [] array = new Animal[15];
+			try {
+				File f=new File(directory);
+			    Scanner sc = new Scanner (f);
+			    int counter=0;
+			    while (sc.hasNext()){
+			    	//We start reading common attributes
+			      char dogOrCat = sc.next().charAt(0);
+			      String name = sc.next();
+			      char gender = sc.next().charAt(0);
+			      int age = sc.nextInt();
+			      boolean sociable = sc.nextBoolean();
+			   	  boolean patrons = sc.nextBoolean();
+			   	  	//We read specific attributes for Dog 
+			   	  	if(dogOrCat == 'p') {
+			   	  		String breed = sc.next();
+			   	  		int size = sc.nextInt();
+			   	  		boolean pdb = sc.nextBoolean();
+			   	  		boolean leishmania = sc.nextBoolean();
+			   	  		//We create the object Dog	
+			   	  		list[counter] = dogOrCat+" "+name+" "+gender+" "+age+" "+sociable+" "+patrons+" "+breed+" "+size+" "+pdb+" "+leishmania;
+			   	  		array[counter] = new Dog(dogOrCat,name,gender,age,sociable,patrons,breed,size,pdb,leishmania);
+			   	  	}else {
+			   	  	//We read specific attributes for Cat
+			   	  		boolean neutered = sc.nextBoolean();
+			   	  		//We create object Cat
+			   	  	list[counter]=dogOrCat+" "+name+" "+gender+" "+" "+age+" "+sociable+" "+patrons+" "+neutered;
+			   	  	array[counter]= new Cat(dogOrCat,name,gender,age,sociable,patrons,neutered);
+			   	  	}
+			   	  	counter++;
+			    }
+			    sc.close();
+			}catch(FileNotFoundException e) {
+				System.out.println("The file is not there");
+			}
 		    return array;
 	 }
 
@@ -100,6 +111,7 @@ public class Main {
 		
 		String req;
 		
+		System.out.println("Choose an animal [1-15]");
 		int numb = introduceNumber(1,15);
 		
 		do {
@@ -162,12 +174,10 @@ public class Main {
 	
 	private static int introduceNumber(int a, int b) throws InputMismatchException{
 		int numb = 0;
-		
 		try {
 			do {
-			System.out.println("Choose an animal [" + a + "-" + b +"]");
 			numb = sc.nextInt();
-			} while (numb < a || numb > b);
+			} while (numb < a  || numb > b );
 		} catch(InputMismatchException e) {
 			System.out.println("Introduce a number between " + a + " and " + b);
 		}

@@ -1,7 +1,8 @@
-package Shelter;
+package lab2;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Main {
@@ -95,17 +96,20 @@ public class Main {
 		
 	}
 	
-	private static void makeRequest(Shelter shelter) {
-		int numb;
+	private static void makeRequest(Shelter shelter) throws InputMismatchException {
+		
 		String req;
+		
+		int numb = introduceNumber(1,15);
+		
 		do {
-			System.out.println("Choose an animal [1-15]");
-			numb = sc.nextInt();
-		} while (numb < 1 || numb > 15);
-		do {
-			System.out.println("Do you want to foster or to adopt?");
-			req = sc.next();
-		} while (!req.equalsIgnoreCase("foster") && !req.equalsIgnoreCase("adopt"));
+			try {
+				System.out.println("Do you want to foster or to adopt?");
+				req = sc.next();
+			} catch (InputMismatchException e) {
+				System.out.println("Please wirte: foster or adopt");
+			}
+			} while (!req.equalsIgnoreCase("foster") && !req.equalsIgnoreCase("adopt"));
 		
 		Request reque = new Request(req);
 		
@@ -113,11 +117,8 @@ public class Main {
 	}
 
 	private static void consultRequest(Shelter shelter) {
-		int numb;
-		do {
-			System.out.println("Choose an animal [1-15]");
-			numb = sc.nextInt();
-		}while (numb < 1 || numb > 15);
+		int numb = introduceNumber(1,15);
+		
 		for(int i=0;i<shelter.getList()[numb-1].getNumbRequest();i++)
 		System.out.println("Request ["+(i+1)+"]: "+shelter.getList()[numb-1].showAllRequests()[i]);
 	}
@@ -141,12 +142,7 @@ public class Main {
 	
 	private static int chooseMenu() {
 		printMenu();
-		int option = 0;
-		
-		do {
-			System.out.println("Introduce the option you want to make: ");
-			option = sc.nextInt();
-		}while(option < 0 || option > 8); //IMPLEMENT WITH EXCEPTIONS
+		int option = introduceNumber(0,9);
 		
 		return option;
 	}
@@ -162,4 +158,19 @@ public class Main {
 		System.out.println("Option 8: Exit");
 	}
 	
+	int cet =introduceNumber(1,15);
+	
+	private static int introduceNumber(int a, int b) throws InputMismatchException{
+		int numb = 0;
+		
+		try {
+			do {
+			System.out.println("Choose an animal [" + a + "-" + b +"]");
+			numb = sc.nextInt();
+			} while (numb < a || numb > b);
+		} catch(InputMismatchException e) {
+			System.out.println("Introduce a number between " + a + " and " + b);
+		}
+		return numb;
+	}
 }

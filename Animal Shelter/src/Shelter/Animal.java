@@ -7,19 +7,19 @@ abstract class Animal{
 	protected String name;
 	protected int age, numbRequest = 0;
 	protected char gender;
-	protected boolean isSociable, hasPatron;
+	protected boolean sociable, patrons;
 	//List 
 	protected Request[] listRequests = new Request[10];
 	
 	
 	//Constructor
-	Animal(char type, String name, char gender, int age, boolean isSociable, boolean hasPatron){
+	Animal(char type, String name, char gender, int age, boolean sociable, boolean patrons){
 		this.type = type;
 		this.name = name;
 		this.age = age;
 		this.gender = gender;
-		this.isSociable = isSociable;
-		this.hasPatron = hasPatron;
+		this.sociable = sociable;
+		this.patrons = patrons;
 	}
 	
 	
@@ -49,7 +49,7 @@ abstract class Animal{
 	
 	
 	public boolean hasPatron() {
-		return hasPatron;
+		return patrons;
 	}
 	
 	
@@ -61,7 +61,7 @@ abstract class Animal{
 	
 	//toString
 	public String toString() {
-		return "Type: "+type+" Name: "+name+ " Age: "+age+" Gender: "+gender+" Sociable: "+isSociable+" Patrons: "+hasPatron+ " Number of requests: "+numbRequest;
+		return "Type: "+type+" Name: "+name+ " Age: "+age+" Gender: "+gender+" Sociable: "+sociable+" Patrons: "+patrons+ " Number of requests: "+numbRequest;
 	}
 	
 	

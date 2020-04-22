@@ -18,8 +18,8 @@ public class Request {
 
 	
 	
-	public void setType(String new_type) {
-		this.type = new_type;
+	public void setType(String newType) {
+		this.type = newType;
 	}
 	
 	

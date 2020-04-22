@@ -14,22 +14,9 @@ class Cat extends Animal {
 	
 	
 	//getters
-	public boolean getPatron() {
-		return hasPatron;
-	}
-	
-	
-	
 	public boolean getNeuter() {
 		return neuter;
 	}
-
-	
-	
-	public char getGender() {
-		return gender;
-	}
-
 	
 	
 	@Override //toString
@@ -38,12 +25,11 @@ class Cat extends Animal {
 	}
 	
 	
-	
 	@Override
 	public double calculateExpenses(int numbDogs, int pdbDogs, int unneuteredCats) {
 		double expenses = 0;
 		
-		if (hasPatron) {
+		if (super.patrons) {
 			expenses = 0;
 		}else {
 			expenses = unneuteredCats*10.0;

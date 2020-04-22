@@ -5,8 +5,7 @@ public class Dog extends Animal {
 	//global variables
 	protected String breed;
 	protected int size;
-	protected boolean pdb;
-	protected boolean leish;
+	protected boolean pdb, leish;
 	
 	
 	//Constructor
@@ -22,18 +21,6 @@ public class Dog extends Animal {
 	//getters
 	public int getSize() {
 		return size;
-	}
-
-	
-	
-	public boolean getSociable() {
-		return isSociable;
-	}
-	
-	
-	
-	public boolean getPatron() {
-		return hasPatron;
 	}
 	
 	
@@ -59,7 +46,7 @@ public class Dog extends Animal {
 	double calculateExpenses(int numbDogs, int numbPdb, int unneuteredCats) {
 		double expenses = 0;
 		
-		if(hasPatron) {
+		if(super.patrons) {
 			expenses = 0;
 		}else {
 			expenses = (25.0*numbDogs*12) + (30.0*numbDogs) + numbPdb*8.0;

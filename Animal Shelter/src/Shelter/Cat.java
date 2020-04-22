@@ -25,7 +25,6 @@ class Cat extends Animal {
 	}
 	
 	
-	@Override
 	public double calculateExpenses(int numbDogs, int pdbDogs, int unneuteredCats) {
 		double expenses = 0;
 		

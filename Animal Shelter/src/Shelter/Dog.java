@@ -42,7 +42,6 @@ public class Dog extends Animal {
 	}
 	
 	
-	@Override
 	double calculateExpenses(int numbDogs, int numbPdb, int unneuteredCats) {
 		double expenses = 0;
 		
